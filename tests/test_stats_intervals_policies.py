@@ -188,3 +188,15 @@ def test_leakage_detector_would_catch_a_leaky_feature(synth):
     corrupt = synth.copy()
     corrupt.iloc[i + 1 :] = 1e6
     assert not leaky(corrupt).iloc[i].equals(base)
+
+
+def test_shift_statistic_uses_only_inputs_before_T(synth):
+    """The monitor at time T reads origins < T only and ignores every row after T."""
+    pdx = PolicyData.build(synth, 6, "C")
+    T = synth.index[3000]
+    base = shift_statistic(pdx, T)
+    corrupt = synth.copy()
+    corrupt.iloc[3000:] = np.random.default_rng(0).normal(1e5, 1e4, size=corrupt.iloc[3000:].shape)
+    pdx2 = PolicyData.build(corrupt, 6, "C")
+    assert shift_statistic(pdx2, T) == base
+    assert np.isnan(shift_statistic(pdx, synth.index[100]))  # not enough history -> no signal

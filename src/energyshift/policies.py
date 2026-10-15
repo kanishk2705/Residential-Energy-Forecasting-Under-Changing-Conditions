@@ -3,8 +3,8 @@
 Implementation details not spelled out in the protocol, recorded here and in the
 README:
   * a retraining at time T uses origins whose target row is strictly before T;
-  * the drift statistic's "recent" window excludes any origin that is also in the
-    "reference" window, and is skipped (no trigger) if fewer than 100 rows remain.
+  * the drift statistic compares inputs of the last 7 days with the 28 days before them
+    (deviation D2 in PROTOCOL.md); it is NaN, and never triggers, if a window has < 100 rows.
 """
 from __future__ import annotations
 
@@ -96,15 +96,14 @@ def schedule_at(times: list[pd.Timestamp]) -> list[tuple[pd.Timestamp, pd.Timest
     return [(t, t - STEP) for t in times]  # labels strictly before t
 
 
-def shift_statistic(pd_: PolicyData, T: pd.Timestamp, label_end: pd.Timestamp,
-                    window_days: int | None = None) -> float:
-    """AUC between the model's last 28 days of training origins and the last 7 days of
-    observed inputs before T (overlap removed). NaN if the recent window is too small."""
-    train_idx = _train_index(pd_, label_end, window_days)
-    ref = train_idx[train_idx > train_idx.max() - pd.Timedelta(days=28)] if len(train_idx) else train_idx
+def shift_statistic(pd_: PolicyData, T: pd.Timestamp) -> float:
+    """Domain-classifier AUC between inputs observed in [T-35d, T-7d) (reference) and in
+    [T-7d, T) (recent). Uses inputs only, so it does not depend on any model or on when
+    the model was last retrained (see PROTOCOL.md deviation D2). NaN if either window is
+    too small."""
     idx = pd_.X.index
     recent = idx[(idx >= T - pd.Timedelta(days=7)) & (idx < T)]
-    recent = recent.difference(ref)
+    ref = idx[(idx >= T - pd.Timedelta(days=35)) & (idx < T - pd.Timedelta(days=7))]
     if len(ref) < MIN_RECENT_ROWS or len(recent) < MIN_RECENT_ROWS:
         return float("nan")
     return domain_auc(pd_.X.loc[ref], pd_.X.loc[recent])
@@ -126,7 +125,7 @@ def run_drift_triggered(pd_: PolicyData, params: dict, serve_start: pd.Timestamp
     stats = {}
     retrains = []
     for d in daily(serve_start, serve_end):
-        stat = shift_statistic(pd_, d, cur_label_end, window_days)
+        stat = shift_statistic(pd_, d)
         stats[d] = stat
         if (not np.isnan(stat)) and stat >= threshold and (d - last_retrain) >= pd.Timedelta(days=min_gap_days):
             cur_label_end = d - STEP

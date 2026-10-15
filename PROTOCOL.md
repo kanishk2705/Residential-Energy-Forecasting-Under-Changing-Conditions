@@ -212,3 +212,16 @@ effective sample size far smaller than the number of rows.
 ## Deviations log
 
 - 2026-10-15 (administrative, before any model run): the text above says the freeze is a git tag. The build sandbox cannot push tags (the git proxy drops tag pushes). The freeze marker is instead the commit `8d2bbb1` on branch `frozen/protocol` (pushed to GitHub). The same applies to `selection-frozen`, which becomes branch `frozen/selection`. No scientific content changed.
+- 2026-10-15 **D2 (before any final-test read; found in a development-region dry run).**
+  Section 9 defined the reference window as "the model's most recent 28 days of training
+  origins" and the recent window as the last 7 days of origins. After a retrain, or right
+  after the development period ends, these windows overlap, and removing the overlap leaves
+  a recent window of only 1-3 days. On development data, a 3-fold day-grouped domain AUC with
+  a 2-3 day positive window averaged 0.46 / 0.53 (k = 2 / 3 days) against 0.58 for a full
+  7-day window, with values as low as 0.17 in the dry run: a known artefact of holding out
+  most of a tiny positive class. **New definition:** reference = inputs of the 28 days
+  *preceding* the recent window, i.e. origins in [T-35 d, T-7 d); recent = origins in
+  [T-7 d, T). The statistic is now independent of any model and of retraining times.
+  Everything else in section 9 (small LightGBM, 3-fold CV with whole-day folds, inputs of
+  the selected model without calendar columns) and the P3 rule (>= 0.65, >= 3 days apart)
+  is unchanged. No final-test value was read and no model selection had been made.
