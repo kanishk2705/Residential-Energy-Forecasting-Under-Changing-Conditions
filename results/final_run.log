@@ -1,0 +1,25 @@
+06:22:36 === h=1 ===
+06:22:54 h=1 grid fitted for set A
+06:23:31 h=1 grid fitted for set B
+06:24:24 h=1 grid fitted for set C
+06:24:24 h=1 E1 done: dMAE=-3.98
+06:25:28 h=1 E3 done
+06:25:32 h=1 E4 done
+06:25:37 h=1 complete
+06:25:37 === h=6 ===
+06:25:53 h=6 grid fitted for set A
+06:26:31 h=6 grid fitted for set B
+06:27:21 h=6 grid fitted for set C
+06:27:21 h=6 E1 done: dMAE=-4.21
+06:27:53 h=6 E3 done
+06:27:55 h=6 E4 done
+06:28:00 h=6 complete
+06:28:00 === h=144 ===
+06:28:18 h=144 grid fitted for set A
+06:28:57 h=144 grid fitted for set B
+06:29:50 h=144 grid fitted for set C
+06:29:50 h=144 E1 done: dMAE=-1.13
+06:30:20 h=144 E3 done
+06:30:22 h=144 E4 done
+06:30:27 h=144 complete
+06:30:27 final results written
