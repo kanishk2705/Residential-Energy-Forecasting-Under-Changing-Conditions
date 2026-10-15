@@ -225,3 +225,12 @@ effective sample size far smaller than the number of rows.
   Everything else in section 9 (small LightGBM, 3-fold CV with whole-day folds, inputs of
   the selected model without calendar columns) and the P3 rule (>= 0.65, >= 3 days apart)
   is unchanged. No final-test value was read and no model selection had been made.
+- 2026-10-15 **D3 (implementation notes, no change to any definition; before final-test read).**
+  Synthetic-data smoke runs of `scripts/run_final.py` found three code bugs, all fixed with
+  tests: a zero-length first model segment when the drift monitor fires on the first day, an
+  empty prediction call on the last test day at h = 144 (no origin there has an observed
+  target), and the shift statistic being recomputed per P3 threshold (now cached; it does not
+  depend on the model). Implementation choices the protocol leaves open: a retraining at time
+  T uses origins whose target row is strictly before T; lower interval bounds are clipped at
+  0 Wh in every variant; ACI keeps alpha_t within [0.005, 0.5]; origins whose target row does
+  not exist (the last h rows) are dropped everywhere.

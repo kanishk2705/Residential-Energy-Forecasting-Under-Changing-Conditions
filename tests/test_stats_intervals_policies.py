@@ -200,3 +200,22 @@ def test_shift_statistic_uses_only_inputs_before_T(synth):
     pdx2 = PolicyData.build(corrupt, 6, "C")
     assert shift_statistic(pdx2, T) == base
     assert np.isnan(shift_statistic(pdx, synth.index[100]))  # not enough history -> no signal
+
+
+def test_schedule_with_zero_length_first_segment(synth):
+    params = {"n_estimators": 10, "num_leaves": 7}
+    pdx = PolicyData.build(synth, 6, "A")
+    t0 = synth.index[2000]
+    sched = [(t0, t0 - 10 * STEP), (t0, t0 - STEP)]  # second model starts where the first would
+    preds = run_schedule(pdx, params, t0, synth.index[2200], sched)
+    assert preds.index.min() == t0 and len(preds) > 0
+
+
+def test_segment_without_observed_targets_is_empty_not_an_error(synth):
+    from energyshift.policies import predict_segment
+    params = {"n_estimators": 10, "num_leaves": 7}
+    pdx = PolicyData.build(synth, 144, "A")
+    model = fit_at(pdx, params, synth.index[2000])
+    end = synth.index[-1] + STEP
+    out = predict_segment(pdx, model, end - pd.Timedelta(hours=1), end)
+    assert len(out) == 0

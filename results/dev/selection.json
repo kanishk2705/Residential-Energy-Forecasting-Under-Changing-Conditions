@@ -1,0 +1,161 @@
+{
+  "1": {
+    "M_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 400,
+        "num_leaves": 15
+      },
+      "dev_mae": 25.9005,
+      "dev_rmse": 66.3015,
+      "fold_mae": {
+        "V1": 26.627,
+        "V2": 27.555,
+        "V3": 23.891,
+        "V4": 25.529
+      }
+    },
+    "L_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 400,
+        "num_leaves": 15
+      },
+      "dev_mae": 25.9005,
+      "dev_rmse": 66.3015,
+      "fold_mae": {
+        "V1": 26.627,
+        "V2": 27.555,
+        "V3": 23.891,
+        "V4": 25.529
+      }
+    },
+    "B_star": {
+      "name": "B1_persistence",
+      "dev_mae": 30.2054,
+      "dev_rmse": 74.2351,
+      "fold_mae": {
+        "V1": 30.045,
+        "V2": 33.299,
+        "V3": 27.455,
+        "V4": 30.023
+      }
+    },
+    "baseline_dev_mae": {
+      "B1_persistence": 30.2054,
+      "B2_mean_last_hour": 39.85,
+      "B5_slot_of_day_median": 43.7059,
+      "B6_slot_of_week_median": 45.032,
+      "B4_same_time_last_week": 63.5146,
+      "B3_same_time_yesterday": 64.4517
+    }
+  },
+  "6": {
+    "M_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 150,
+        "num_leaves": 15
+      },
+      "dev_mae": 39.3057,
+      "dev_rmse": 93.7545,
+      "fold_mae": {
+        "V1": 38.908,
+        "V2": 41.527,
+        "V3": 36.22,
+        "V4": 40.569
+      }
+    },
+    "L_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 150,
+        "num_leaves": 15
+      },
+      "dev_mae": 39.3057,
+      "dev_rmse": 93.7545,
+      "fold_mae": {
+        "V1": 38.908,
+        "V2": 41.527,
+        "V3": 36.22,
+        "V4": 40.569
+      }
+    },
+    "B_star": {
+      "name": "B5_slot_of_day_median",
+      "dev_mae": 43.7333,
+      "dev_rmse": 103.2107,
+      "fold_mae": {
+        "V1": 40.908,
+        "V2": 46.796,
+        "V3": 43.333,
+        "V4": 43.897
+      }
+    },
+    "baseline_dev_mae": {
+      "B5_slot_of_day_median": 43.7333,
+      "B6_slot_of_week_median": 45.0606,
+      "B2_mean_last_hour": 50.5454,
+      "B1_persistence": 56.3195,
+      "B4_same_time_last_week": 63.5524,
+      "B3_same_time_yesterday": 64.4863
+    }
+  },
+  "144": {
+    "M_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 150,
+        "num_leaves": 15
+      },
+      "dev_mae": 42.8084,
+      "dev_rmse": 99.6976,
+      "fold_mae": {
+        "V1": 44.049,
+        "V2": 43.255,
+        "V3": 38.529,
+        "V4": 45.4
+      }
+    },
+    "L_star": {
+      "fset": "A",
+      "family": "lgbm",
+      "params": {
+        "n_estimators": 150,
+        "num_leaves": 15
+      },
+      "dev_mae": 42.8084,
+      "dev_rmse": 99.6976,
+      "fold_mae": {
+        "V1": 44.049,
+        "V2": 43.255,
+        "V3": 38.529,
+        "V4": 45.4
+      }
+    },
+    "B_star": {
+      "name": "B5_slot_of_day_median",
+      "dev_mae": 42.9196,
+      "dev_rmse": 101.6338,
+      "fold_mae": {
+        "V1": 41.329,
+        "V2": 43.864,
+        "V3": 40.308,
+        "V4": 46.177
+      }
+    },
+    "baseline_dev_mae": {
+      "B5_slot_of_day_median": 42.9196,
+      "B6_slot_of_week_median": 44.1964,
+      "B2_mean_last_hour": 59.7643,
+      "B4_same_time_last_week": 62.6389,
+      "B3_same_time_yesterday": 63.6104,
+      "B1_persistence": 63.6104
+    }
+  }
+}

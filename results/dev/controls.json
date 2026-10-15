@@ -1,0 +1,53 @@
+{
+  "1": {
+    "best_dev_mae_by_set": {
+      "A": 25.9005,
+      "B": 26.0007,
+      "C": 26.0555,
+      "N": 26.0739
+    },
+    "rv_gain_share": 0.0104,
+    "rv_gain_share_if_uniform": 0.0339,
+    "shuffled_targets_mae_over_B5_mae": 1.0197,
+    "lstar_single_seed_dev_mae": [
+      25.9514,
+      25.9584,
+      25.9785
+    ],
+    "lstar_ensemble_dev_mae": 25.9005
+  },
+  "6": {
+    "best_dev_mae_by_set": {
+      "A": 39.3057,
+      "B": 39.7204,
+      "C": 40.0583,
+      "N": 40.0942
+    },
+    "rv_gain_share": 0.0015,
+    "rv_gain_share_if_uniform": 0.0339,
+    "shuffled_targets_mae_over_B5_mae": 1.0288,
+    "lstar_single_seed_dev_mae": [
+      39.4299,
+      39.2589,
+      39.4696
+    ],
+    "lstar_ensemble_dev_mae": 39.3057
+  },
+  "144": {
+    "best_dev_mae_by_set": {
+      "A": 42.8084,
+      "B": 43.5872,
+      "C": 43.7222,
+      "N": 43.8548
+    },
+    "rv_gain_share": 0.0003,
+    "rv_gain_share_if_uniform": 0.0339,
+    "shuffled_targets_mae_over_B5_mae": 1.1865,
+    "lstar_single_seed_dev_mae": [
+      42.7656,
+      42.9239,
+      43.0092
+    ],
+    "lstar_ensemble_dev_mae": 42.8084
+  }
+}

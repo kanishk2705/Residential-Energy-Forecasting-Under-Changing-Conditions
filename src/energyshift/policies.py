@@ -64,6 +64,8 @@ def predict_segment(pd_: PolicyData, model: LGBMEnsemble, start: pd.Timestamp,
     idx = pd_.X.index
     m = (idx >= start) & (idx < stop) & pd_.y.notna().to_numpy()
     sel = idx[m]
+    if len(sel) == 0:  # e.g. the last day at h = 144: no origin has an observed target
+        return pd.Series(dtype=float, index=sel)
     return pd.Series(model.predict(pd_.X.loc[sel]), index=sel)
 
 
@@ -77,8 +79,11 @@ def run_schedule(pd_: PolicyData, params: dict, serve_start: pd.Timestamp, serve
     parts = []
     for k, (t0, label_end) in enumerate(schedule):
         t1 = schedule[k + 1][0] if k + 1 < len(schedule) else serve_end
+        a, b = max(t0, serve_start), min(t1, serve_end)
+        if a >= b:  # e.g. a drift retrain on the very first day leaves the first model no origins
+            continue
         model = fit_at(pd_, params, label_end, window_days)
-        parts.append(predict_segment(pd_, model, max(t0, serve_start), min(t1, serve_end)))
+        parts.append(predict_segment(pd_, model, a, b))
     return pd.concat(parts)
 
 
@@ -101,12 +106,17 @@ def shift_statistic(pd_: PolicyData, T: pd.Timestamp) -> float:
     [T-7d, T) (recent). Uses inputs only, so it does not depend on any model or on when
     the model was last retrained (see PROTOCOL.md deviation D2). NaN if either window is
     too small."""
+    key = ("shift_auc", T)
+    if key in pd_.cache:  # the statistic does not depend on any model, so it is shared
+        return pd_.cache[key]
     idx = pd_.X.index
     recent = idx[(idx >= T - pd.Timedelta(days=7)) & (idx < T)]
     ref = idx[(idx >= T - pd.Timedelta(days=35)) & (idx < T - pd.Timedelta(days=7))]
     if len(ref) < MIN_RECENT_ROWS or len(recent) < MIN_RECENT_ROWS:
-        return float("nan")
-    return domain_auc(pd_.X.loc[ref], pd_.X.loc[recent])
+        pd_.cache[key] = float("nan")
+    else:
+        pd_.cache[key] = domain_auc(pd_.X.loc[ref], pd_.X.loc[recent])
+    return pd_.cache[key]
 
 
 def run_drift_triggered(pd_: PolicyData, params: dict, serve_start: pd.Timestamp,
