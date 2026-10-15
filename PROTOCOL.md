@@ -211,4 +211,4 @@ effective sample size far smaller than the number of rows.
 
 ## Deviations log
 
-(empty at freeze)
+- 2026-10-15 (administrative, before any model run): the text above says the freeze is a git tag. The build sandbox cannot push tags (the git proxy drops tag pushes). The freeze marker is instead the commit `8d2bbb1` on branch `frozen/protocol` (pushed to GitHub). The same applies to `selection-frozen`, which becomes branch `frozen/selection`. No scientific content changed.
